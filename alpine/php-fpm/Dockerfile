@@ -1,4 +1,4 @@
-  1 From php:7.4.7-fpm-alpine
+  1 FROM php:7.4.7-fpm-alpine
   2 RUN apk add --update --no-cache libzip-dev \
   3  && docker-php-ext-install mysqli pdo pdo_mysql zip  \
   4  && docker-php-ext-enable mysqli pdo pdo_mysql zip \
