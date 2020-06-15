@@ -19,6 +19,8 @@ RUN  apk add --update --no-cache \
        libbz2 \
        # for net-snmp \
        net-snmp-libs \
+       # for memcached \
+       libmemcached-libs \
     && apk add --update --no-cache --virtual .build-deps \
         # for zip \
         libzip-dev \
@@ -43,11 +45,18 @@ RUN  apk add --update --no-cache \
         bzip2-dev \
         # for snmp \
         net-snmp-dev \
+        # for pecl \
+        autoconf g++ make \
+        # for memcached \
+        cyrus-sasl-dev \
+        libmemcached-dev \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install \
         calendar exif \
         pdo mysqli pdo_mysql zip gd bcmath intl gettext soap xsl xmlrpc ldap imap bz2 snmp \
     && docker-php-ext-enable opcache \
+    && pecl install memcached \
+    && docker-php-ext-enable memcached \
     && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
     && sed -i "s/^;opcache.enable=.*/opcache.enable=1/g" /usr/local/etc/php/php.ini \
     && sed -i "s/^;opcache.enable_cli=.*/opcache.enable_cli=1/g" /usr/local/etc/php/php.ini \
