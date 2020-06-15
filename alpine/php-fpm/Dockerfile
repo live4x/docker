@@ -23,7 +23,7 @@ RUN  apk add --update --no-cache \
     && docker-php-ext-install \
         calendar exif \
         pdo mysqli pdo_mysql zip gd bcmath intl gettext \
-    && echo -e "\n opcache.enable=1 \n opcache.enable_cli=1 \n opcache.memory_consumption=128 \n opcache.interned_strings_buffer=8 \n opcache.max_accelerated_files=4000 \n opcache.revalidate_freq=60 \n opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+    && echo -e "zend_extension=opcache.so\n [opcache] \n opcache.enable=1 \n opcache.enable_cli=1 \n opcache.memory_consumption=128 \n opcache.interned_strings_buffer=8 \n opcache.max_accelerated_files=4000 \n opcache.revalidate_freq=60 \n opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
     && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
