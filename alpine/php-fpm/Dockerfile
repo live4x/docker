@@ -15,6 +15,10 @@ RUN  apk add --update --no-cache \
        libldap \
        # for imap \
        c-client \
+       # for bz2 \
+       libbz2 \
+       # for net-snmp \
+       net-snmp-libs \
     && apk add --update --no-cache --virtual .build-deps \
         # for zip \
         libzip-dev \
@@ -35,14 +39,21 @@ RUN  apk add --update --no-cache \
         openldap-dev \
         # for imap \
         imap-dev \
+        # for bz2 \
+        bzip2-dev \
+        # for snmp \
+        net-snmp-dev \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install \
         calendar exif \
-        pdo mysqli pdo_mysql zip gd bcmath intl gettext soap xsl xmlrpc ldap imap \
+        pdo mysqli pdo_mysql zip gd bcmath intl gettext soap xsl xmlrpc ldap imap bz2 snmp \
     && docker-php-ext-enable opcache \
     && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
     && sed -i "s/^;opcache.enable=.*/opcache.enable=1/g" /usr/local/etc/php/php.ini \
     && sed -i "s/^;opcache.enable_cli=.*/opcache.enable_cli=1/g" /usr/local/etc/php/php.ini \
+    && sed -i "s/^post_max_size =.*/post_max_size = 16M/g" /usr/local/etc/php/php.ini \
+    && sed -i "s/^memory_limit =.*/memory_limit = 256M/g" /usr/local/etc/php/php.ini \
+    && sed -i "s/^upload_max_filesize =.*/upload_max_filesize = 16M/g" /usr/local/etc/php/php.ini \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 EXPOSE 9000
