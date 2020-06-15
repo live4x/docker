@@ -23,6 +23,12 @@ RUN  apk add --update --no-cache \
        libmemcached-libs libsasl \
        # for mcrypt \
        libmcrypt \
+       # for gmp \
+       gmp \
+       # for aspell \
+       aspell-libs \
+       # for tidy \
+       tidyhtml-libs \       
     && apk add --update --no-cache --virtual .build-deps \
         # for zip \
         libzip-dev \
@@ -54,15 +60,24 @@ RUN  apk add --update --no-cache \
         libmemcached-dev \
         # for mcrypt \
         libmcrypt-dev \
+        # for gmp \
+        gmp-dev \
+        # for aspell \
+        aspell-dev \
+        # for tidy \
+        tidyhtml-dev \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install \
-        calendar exif \
-        pdo mysqli pdo_mysql zip gd bcmath intl gettext soap xsl xmlrpc ldap imap bz2 snmp \
+        calendar exif sockets sysvmsg sysvsem sysvshm shmop pcntl \
+        pdo mysqli pdo_mysql zip gd bcmath intl gettext soap xsl \
+        xmlrpc ldap imap bz2 snmp gmp pspell tidy \
     && docker-php-ext-enable opcache \
-    && pecl install memcached \
+    && pecl install memcached memcache \
     && pecl install mcrypt \
     && pecl install uploadprogress \
-    && docker-php-ext-enable memcached mcrypt uploadprogress \
+    && pecl install msgpack igbinary \
+    && pecl install redis \
+    && docker-php-ext-enable memcached memcache mcrypt uploadprogress msgpack igbinary redis \
     && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
     && sed -i "s/^;opcache.enable=.*/opcache.enable=1/g" /usr/local/etc/php/php.ini \
     && sed -i "s/^;opcache.enable_cli=.*/opcache.enable_cli=1/g" /usr/local/etc/php/php.ini \
@@ -70,5 +85,5 @@ RUN  apk add --update --no-cache \
     && sed -i "s/^memory_limit =.*/memory_limit = 256M/g" /usr/local/etc/php/php.ini \
     && sed -i "s/^upload_max_filesize =.*/upload_max_filesize = 16M/g" /usr/local/etc/php/php.ini \
     && apk del .build-deps \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /tmp/* /var/cache/apk/*
 EXPOSE 9000
