@@ -72,7 +72,7 @@ RUN  apk add --update --no-cache \
         pdo mysqli pdo_mysql zip gd bcmath intl gettext soap xsl \
         xmlrpc ldap imap bz2 snmp gmp pspell tidy \
     && docker-php-ext-enable opcache \
-    && pecl install memcached memcache \
+    && pecl install memcached \
     && pecl install mcrypt \
     && pecl install uploadprogress \
     && pecl install msgpack igbinary \
