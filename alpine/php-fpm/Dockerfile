@@ -1,4 +1,4 @@
-FROM php:7.4.14-fpm-alpine
+FROM php:7.4.16-fpm-alpine
 RUN  apk add --update --no-cache \
        # dependancies \
        # dependancy for zip \
