@@ -73,6 +73,7 @@ RUN  apk add --update --no-cache \
         xmlrpc ldap imap bz2 snmp gmp pspell tidy \
     && docker-php-ext-enable opcache \
     && pecl install memcached \
+    && pecl install https://pecl.php.net/get/memcache-8.0.tgz \
     && pecl install mcrypt \
     && pecl install uploadprogress \
     && pecl install msgpack igbinary \
